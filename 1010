@@ -1,0 +1,41 @@
+/*一元多项式求导 (x^n)'=n*x^(n-1)
+特例 零多项式 0 0
+输入非零项系数和指数; 输出同格式*/
+/*未知长度->读到EOF结束 ? 
+以指数递降方式输入（绝对值<=1000的整数）*/
+#include<stdio.h>
+void derivative(int* a, int size); //求导函数 i/o数组 
+int main(void)
+{
+	int a[2010]={0};//记录输入
+	int i=0;
+	while(1){
+		if(scanf("%d",&a[i])!=EOF)
+			i++;
+		else
+			break;
+	}
+	derivative(a,i);
+
+//	for(int j=0;j<i;j++){
+//		printf("%d",a[j]);}
+	return 0;
+	
+ } 
+void derivative(int* a, int size){
+	if(a[1]==0&&size==2)
+		printf("0 0");
+	else{
+	for(int i=0;i<size;i+=2){ 
+		a[i]=a[i+1]*a[i];
+		if(a[i+1]==0) a[i+1]=0;
+		else a[i+1]--;
+	}
+	for(int i=0;i<size;i+=2){
+		if(!a[i]&&!a[i+1]) break;
+		if(i==0) printf("%d %d",a[0],a[1]);
+		else printf(" %d %d",a[i],a[i+1]);
+	}
+}
+}
+ 
