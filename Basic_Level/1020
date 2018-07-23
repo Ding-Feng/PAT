@@ -1,0 +1,40 @@
+//struct sort
+//贪心
+
+#include<stdio.h>
+#include<algorithm>
+using namespace std;
+
+struct mooncake{
+	double store;
+	double totprice;
+	double price;
+}mk[1010];
+bool cmp(mooncake a,mooncake b){
+	return a.price > b.price;
+}
+int main(void)
+{
+	int n,d;
+	scanf("%d %d",&n,&d);
+	for(int i=0;i<n;i++){
+		scanf("%lf",&mk[i].store);
+	}
+	for(int i=0;i<n;i++){
+		scanf("%lf",&mk[i].totprice);
+		mk[i].price=mk[i].totprice/mk[i].store;
+	}
+	sort(mk,mk+n,cmp);
+	double ans=0;
+	for(int i=0;i<n;i++){
+		if(d >= mk[i].store){
+			ans = ans+ mk[i].totprice;
+			d-=mk[i].store;
+		}else{
+			ans += mk[i].price*d;
+			break;
+		}
+	}
+	printf("%.2f",ans);
+	return 0;
+}
