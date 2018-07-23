@@ -1,0 +1,56 @@
+//德才论 struct sort
+//这个cmp真的麻烦 
+#include<stdio.h>
+#include<algorithm>
+using namespace std;
+struct Student{
+	int id;
+	int moral;
+	int gift;
+	int kind;
+};
+typedef struct Student stu;
+bool cmp(stu a,stu b){
+	int suma=a.gift+a.moral;
+	int sumb=b.gift+b.moral;
+	if(a.kind!=b.kind) 
+		return a.kind<b.kind;
+	else if(suma!=sumb)
+		return suma>sumb;
+	else if(a.moral!=b.moral)
+		return a.moral>b.moral;
+	else	
+		return a.id<b.id;
+}
+
+int main(void)
+{
+	stu s[100010];
+	int n,l,h;
+	int count=0;
+	scanf("%d %d %d",&n,&l,&h);
+	for(int i=0;i<n;i++){
+		scanf("%d %d %d",&s[i].id,&s[i].moral,&s[i].gift);
+		if(s[i].gift>=h && s[i].moral>=h)
+			s[i].kind=1;
+		else if(s[i].gift<l||s[i].moral<l){
+			s[i].kind=5;
+			count++; 
+		}
+		else if(s[i].moral>=s[i].gift&&
+		s[i].gift<h&&s[i].moral>=h)
+			s[i].kind=2;
+		else if(s[i].moral>=s[i].gift&&
+		s[i].gift<h&&s[i].moral<h)
+			s[i].kind=3;
+		else s[i].kind=4;
+	}
+	sort(s,s+n,cmp);
+	int m=n-count;
+	printf("%d\n",m);
+	for(int i=0;i<m;i++){
+		printf("%d %d %d\n",s[i].id,s[i].moral,s[i].gift);
+	}
+	
+	return 0;	
+} 
