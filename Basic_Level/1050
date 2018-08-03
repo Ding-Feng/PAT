@@ -1,0 +1,65 @@
+二维数组 
+vector 排序
+用printf测试边界条件
+
+#include<cstdio>
+#include<algorithm>
+#include<vector>
+#include<math.h>
+using namespace std;
+bool cmp(int a,int b){
+	return a>b;
+}
+int main(void)
+{
+	vector<int> v;
+	int n,m;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		scanf("%d",&m);
+		v.push_back(m);
+	}
+	sort(v.begin(),v.end(),cmp);
+/*	for(int i=0;i!=v.size();i++){
+		printf("%d ",v[i]);
+	}
+*/
+	int row,col;
+	int tmp;
+	for(tmp=sqrt(n);tmp>=1;tmp--){
+		if(n%tmp==0){
+			row=n/tmp;
+			col=tmp;
+			break;
+		}
+	}
+	int**ans =new int*[row+1];
+	for(int i=0;i<row;i++)
+		ans[i]=new int[col+1];
+	for(int i = 0; i < row; i++)
+		for(int j = 0; j < col; j++)
+			ans[i][j] = 0;
+	int count=0,i=0,j=0;
+	while(count<n){
+	while(j<col&&!ans[i][j])
+		ans[i][j++]=v[count++];
+	j--;i++;
+	while(i<row&&!ans[i][j])
+		ans[i++][j]=v[count++];
+	i--;j--;
+	while(j>=0&&!ans[i][j])
+		ans[i][j--]=v[count++];
+	j++;i--;
+	while(i>=0&&!ans[i][j])
+		ans[i--][j]=v[count++];
+	j++;i++;
+	}
+	for(int i=0;i<row;i++){
+		for(int j=0;j<col;j++){
+			printf("%d",ans[i][j]);
+			if(j<col-1) printf(" ");
+		}
+		printf("\n");
+	}
+	return 0;
+}
