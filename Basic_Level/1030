@@ -1,0 +1,26 @@
+#include<stdio.h>
+#include<algorithm>
+using namespace std;
+
+int main(void)
+{
+	long long n,p;
+	long long a[100010];
+	int ans=0;
+	int min;
+	scanf("%lld %lld",&n,&p);
+	for(int i=0;i<n;i++){
+		scanf("%lld",&a[i]);
+	}
+	sort(a,a+n);
+	for(int i=0;i<n;i++){
+		min=a[i];
+		for(int j=i+ans;j<n;j++){
+			if(a[j]<=p*min){
+				if(j-i+1>ans) ans=j-i+1;
+			}else break;
+		}
+	}
+	printf("%d",ans);
+	return 0;
+}
