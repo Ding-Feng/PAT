@@ -1,0 +1,57 @@
+//写一遍两种排序然后对比emm神奇的复杂度 还好规模不大
+
+#include<bits/stdc++.h>
+using namespace std;
+int n;
+void Insort(int a[],int b[]){
+	int key=0;
+	for(int i=2;i<n;i++){
+		sort(a,a+i);
+		if(key){
+			cout<<"Insertion Sort"<<endl;
+			cout<<a[0];
+			for(int j=1;j<n;j++){
+				cout<<" "<<a[j];
+			}
+			return;
+		}
+		if(equal(a,a+n,b))
+			key=1;
+	}
+}
+void Mesort(int a[],int b[]){
+	int key = 0;
+	for (int i = 2;; i *= 2) {
+		for (int j = 0; j < n; j += i) {
+			sort(a+j,a+(j+i<n?j+i:n));
+		}
+		if (key) {
+			cout << "Merge Sort" << endl;
+			cout << a[0];
+			for (int j = 1; j < n; j++)
+				cout << " " << a[j];
+			return;
+		}
+		if (equal(a, a + n, b))
+			key = 1;
+		if (i > n)
+			break;
+	}
+}
+
+
+int main()
+{
+	int a2[100],a1[100],b[100];
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		scanf("%d",&a1[i]);
+		a2[i]=a1[i];
+	}
+	for(int i=0;i<n;i++){
+		scanf("%d",&b[i]);
+	}
+	Insort(a2,b);
+	Mesort(a1,b);
+	return 0;
+}
