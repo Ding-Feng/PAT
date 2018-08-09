@@ -1,0 +1,65 @@
+// dijkstra
+
+
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=510;
+const int INF=0x3fffffff;
+
+int N,M,C1,C2;
+int weight[maxn];
+int w[maxn],d[maxn],num[maxn];
+int G[maxn][maxn];
+bool vis[maxn]={false};
+void Dijkstra(int s){
+	fill(d,d+maxn,INF);
+	memset(num,0,sizeof(num));
+	memset(w,0,sizeof(w));
+	d[s]=0;
+	w[s]=weight[s];
+	num[s]=1;
+	for(int i=0;i<N;i++){
+		int u=-1,min=INF;
+		for(int j=0;j<N;j++){
+			if(vis[j]==false&&d[j]<min){
+				u=j;
+				min=d[j];
+			}
+		}
+		if(u==-1) return;
+		vis[u]=true;
+		for(int v=0;v<N;v++){
+			if(vis[v]==false&&G[u][v]!=INF){
+				if(d[u]+G[u][v]<d[v]){
+					d[v]=d[u]+G[u][v];
+					w[v]=w[u]+weight[v];
+					num[v]=num[u];
+				}else if(d[u]+G[u][v]==d[v]){
+					if(w[u]+weight[v]>w[v]){
+						w[v]=w[u]+weight[v];
+					}
+					num[v]+=num[u];
+				}
+			}
+		}
+	}
+}
+
+int main(void)
+{
+	scanf("%d%d%d%d",&N,&M,&C1,&C2);
+	for(int i=0;i<N;i++){
+		scanf("%d",&weight[i]);
+	}
+	fill(G[0],G[0]+maxn*maxn,INF);
+	for(int i=0;i<M;i++){
+		int j,k,tmp;
+		scanf("%d %d %d",&j,&k,&tmp);
+		G[j][k]=tmp;
+		G[k][j]=tmp;
+	}
+	Dijkstra(C1);
+	printf("%d %d\n",num[C2],w[C2]);
+	return 0;
+}
+
