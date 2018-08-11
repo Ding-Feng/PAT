@@ -1,0 +1,38 @@
+//素数筛+进制转换；
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=100001;
+bool P[maxn]={false};
+void PrimeTable(){
+	int i;
+	P[0]=P[1]=true;  //必须加
+	for(i=2;i<maxn;i++){
+		if(P[i]==false){
+			for(int j=i+i;j<maxn;j+=i){
+				P[j]=true;
+			}
+		}
+	}
+}
+int reverse(int a,int n){
+	int res=0;
+	while(a/n!=0){
+		res=res*n+a%n;
+		a=a/n;
+	}
+	res=res*n+a;
+	return res;
+}
+
+int main(){
+	PrimeTable();
+	int a,n,b;
+	while(scanf("%d",&a)&&a>0){
+			scanf("%d",&n);
+			b=reverse(a,n); //n进制翻转
+			if(P[a]==true||P[b]==true) printf("No\n");
+			else printf("Yes\n");
+	}
+
+	return 0;
+}
