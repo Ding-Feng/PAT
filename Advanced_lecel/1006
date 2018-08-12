@@ -1,0 +1,34 @@
+//结构体排序 水题
+
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef struct studentinfo{
+	string stuid;
+	string SignIn;
+	string SignOut;
+}stu;
+bool cmp1(stu a,stu b){
+	return a.SignIn < b.SignIn;
+}
+bool cmp2(stu a,stu b){
+	return a.SignOut > b.SignOut;
+}
+int main()
+{
+
+	int n;
+	string id,in,out;
+	cin>>n;
+	stu tmp;
+	vector<stu> s;
+	for(int i=0;i<n;i++){
+		cin>>tmp.stuid>>tmp.SignIn>>tmp.SignOut;
+		s.push_back(tmp);
+	}
+	sort(s.begin(),s.end(),cmp1);
+	cout<<s[0].stuid<<' ';
+	sort(s.begin(),s.end(),cmp2);
+	cout<<s[0].stuid;
+	return 0;
+}
