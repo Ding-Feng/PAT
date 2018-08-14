@@ -1,0 +1,42 @@
+//层序遍历
+
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<int> v[100];
+int level[100],res[100],maxlevel=-1;
+void BFS(){
+	queue<int> q;
+	q.push(1);
+	level[1]=0;
+	while(!q.empty()){
+		int index=q.front();
+		q.pop();
+		maxlevel=max(level[index],maxlevel);
+		if(v[index].size()==0){
+			res[level[index]]++;
+		}
+		for(int i=0;i<v[index].size();i++){
+			q.push(v[index][i]);
+			level[v[index][i]]=level[index]+1;
+		}
+	}
+}
+int main()
+{
+	int n,m,id,k,c;
+	scanf("%d %d",&n,&m);
+	for(int i=0;i<m;i++){
+		scanf("%d %d",&id,&k);
+		for(int j=0;j<k;j++){
+			scanf("%d",&c);
+			v[id].push_back(c);
+		}
+	}
+	BFS();
+	printf("%d",res[0]);
+	for(int i=1;i<=maxlevel;i++){
+		printf("% d",res[i]);
+	}
+	return 0;
+}
