@@ -78,6 +78,7 @@ int main() {
 		}
 	}
 	printf("%d %d\n", num[t], w[t]);
+//与习题无关的分割线------------------------------
 	DFS(t);
 	for(int i=path.size()-1;i>=0;i--){
 		if(i==0) printf("%d",path[i]);
