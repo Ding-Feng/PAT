@@ -1,0 +1,80 @@
+//和1003一个思路 dijkstra + DFS
+
+#include<cstdio>
+#include<vector>
+#include<algorithm>
+using namespace std;
+const int maxn = 510;
+const int inf = 99999999;
+int n, m, s, d, Min=inf;
+int dis[maxn], num[maxn];
+bool vis[maxn] = { false };
+int G[maxn][maxn];
+int f[maxn][maxn];
+vector<int> pre[maxn], path, tmp;
+
+int main() {
+	void DFS(int d);
+	fill(G[0], G[0] + maxn * maxn, inf);
+	fill(dis, dis + maxn, inf);
+	scanf("%d %d %d %d", &n, &m, &s, &d);
+	for (int i = 0; i < m; i++) {
+		int j, k, di, c;
+		scanf("%d %d %d %d", &j, &k, &di, &c);
+		G[j][k] = G[k][j] = di;
+		f[j][k] = f[k][j] = c;
+	}
+	dis[s] = 0;
+	num[s] = 1;
+
+	for (int i = 0; i < n; i++) {
+		int u = -1, minn = inf;
+		for (int j = 0; j < n; j++) {
+			if (vis[j] == false && dis[j] < minn) {
+				u = j;
+				minn = dis[j];
+			}
+		}
+		if (u == -1)
+			break;
+		vis[u] = true;
+		for (int v = 0; v < n; v++) {
+			if (vis[v] == false && G[u][v] != inf) {
+				if (dis[u] + G[u][v] < dis[v]) {
+					dis[v] = dis[u] + G[u][v];
+					num[v] = num[u];
+					pre[v].clear();
+					pre[v].push_back(u);
+				} else if (dis[u] + G[u][v] == dis[v]) {
+					num[v] = num[u] + num[v];
+					pre[v].push_back(u);
+				}
+			}
+		}
+	}
+	DFS(d);
+	for (int i = path.size() - 1; i >= 0; i--) {
+		printf("%d ", path[i]);
+	}
+	printf("%d %d", dis[d], Min);
+	return 0;
+}
+void DFS(int v) {
+	tmp.push_back(v);
+	if (v == s) {
+		int cost = 0;
+		for (int i = tmp.size() - 1; i > 0; i--) {
+			cost += f[tmp[i]][tmp[i - 1]];
+		}
+		if (cost < Min) {
+			Min = cost;
+			path = tmp;
+		}
+		tmp.pop_back();
+		return;
+	}
+	for (int i = 0; i < pre[v].size(); i++) {
+		DFS(pre[v][i]);
+	}
+	tmp.pop_back();
+}
