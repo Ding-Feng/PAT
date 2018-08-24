@@ -1,0 +1,123 @@
+//发现自己原来不会写排序
+//这题真的做得很痛苦 代码基本是照着别人的框架写的 待重做
+
+#include<string>
+#include<sstream>
+#include<vector>
+#include<iostream>
+#include<iomanip>  //格式控制
+#include<algorithm>
+using namespace std;
+const int maxn = 1010;
+int TotalNumber = 0;
+int toll[24];
+struct Node {
+	string month;
+	string name;
+	string time;
+	string status;
+} node[1000];
+bool cmp(Node a, Node b) {
+	if (a.name == b.name) {
+		return a.time < b.time;
+	} else {
+		return a.name < b.name;
+	}
+}
+int Dur(string start, string end) {
+	if (start >= end)
+		return 0;
+	for (int i = 0; i < start.size(); i++)
+		if (start[i] == ':')
+			start[i] = end[i] = ' ';
+	int d1, d2, h1, h2, m1, m2;
+	stringstream ss;
+	ss << start;
+	ss >> d1 >> h1 >> m1;
+	ss.clear();
+	ss << end;
+	ss >> d2 >> h2 >> m2;
+	return 24 * 60 * (d2 - d1) + 60 * (h2 - h1) + (m2 - m1);
+}
+double Cost(string time) {
+	for (int i = 0; i < time.size(); i++)
+		if (time[i] == ':')
+			time[i] = ' ';
+	stringstream ss;
+	ss << time;
+	int d, h, m;
+	ss >> d >> h >> m;
+	double cost = 0;
+	int sum = 0;
+	for (int i = 0; i < 24; i++) {
+		sum += toll[i];
+	}
+	cost += (1.0 * sum / 100 * d * 60);
+	for (int i = 0; i < h; i++)
+		cost += (1.0 * toll[i] / 100 * 60);
+	cost += (1.0 * toll[h] / 100 * m);
+	return cost;
+}
+
+int main() {
+	string name;
+	for (int i = 0; i < 24; i++) {
+		cin >> toll[i];
+	}
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		string time;
+		cin >> node[i].name >> time >> node[i].status;
+		node[i].month = time.substr(0, 2);
+		node[i].time = time.substr(3, time.size() - 3);
+	}
+	sort(node, node + n, cmp);
+
+	vector<Node> vec;
+	for (int i = 0; i < n; i++) {
+		if (name.empty() || node[i].name == name) {
+			vec.push_back(node[i]);
+			name = node[i].name;
+		}
+		if (!name.empty() && node[i].name != name || i == n - 1) {
+			bool flag = false;
+			int j;
+			for (j = 0; j < vec.size(); j++) {
+				if (vec[j].status == "on-line")
+					flag = true;
+				if (flag && vec[j].status == "off-line")
+					break;
+			}
+			if (j == vec.size()) {
+				name = node[i].name;
+				vec.clear();
+				vec.push_back(node[i]);
+				continue;
+			}
+			cout << name << ' ' << node[i - 1].month << endl;
+			string start, end;
+			double totalcost = 0;
+			for (int i = 0; i < vec.size(); i++) {
+				if (vec[i].status == "on-line")
+					start = vec[i].time;
+				else if (vec[i].status == "off-line" && !start.empty()) {
+					end = vec[i].time;
+					int total;
+					double cost;
+					total = Dur("00:00:00", end) - Dur("00:00:00", start);
+					cost = Cost(end) - Cost(start);
+					cout << start << " " << end << " " << total << " $" << fixed
+							<< setprecision(2) << cost << endl;
+					totalcost += cost;
+					start.clear();
+				}
+			}
+			cout << "Total amount: $" << totalcost << endl;
+			name = node[i].name;
+			vec.clear();
+			vec.push_back(node[i]);
+		}
+	}
+	return 0;
+}
