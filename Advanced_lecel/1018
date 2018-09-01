@@ -1,0 +1,96 @@
+//dijkstra+dfs 典型题
+//dfs 双标尺
+#include<cstdio>
+#include<vector>
+#include<algorithm>
+using namespace std;
+const int maxn = 510, inf = 99999999;
+int cmax, n, sp, m;
+int minNeed = inf, minBack = inf;
+int weight[maxn], e[maxn][maxn], dis[maxn];
+bool vis[maxn] = { false };
+vector<int> pre[maxn], path, tmp;
+
+void Dijkstra(int s) {
+	dis[s] = 0;
+	for (int i = 0; i <= n; i++) {
+		int u = -1, minn = inf;
+		for (int j = 0; j <= n; j++) {
+			if (vis[j] == false && dis[j] < minn) {
+				u = j;
+				minn = dis[j];
+			}
+		}
+		if (u == -1)
+			return;
+		vis[u] = true;
+		for (int v = 0; v <= n; v++) {
+			if (vis[v] == false && e[v][u] != inf) {
+				if (dis[v] > dis[u] + e[u][v]) {
+					dis[v] = dis[u] + e[u][v];
+					pre[v].clear();
+					pre[v].push_back(u);
+				} else if (dis[v] == dis[u] + e[u][v]) {
+					pre[v].push_back(u);
+				}
+			}
+		}
+	}
+}
+
+void dfs(int v) {
+	tmp.push_back(v);
+	if (v == 0) {
+		int need = 0, back = 0;
+		for (int i = tmp.size() - 1; i >= 0; i--) {
+			int id = tmp[i];
+			if (weight[id] > 0) {
+				back += weight[id];
+			} else {
+				if (back > (0 - weight[id])) {
+					back += weight[id];
+				} else {
+					need += (0 - weight[id] - back);
+					back = 0;
+				}
+			}
+		}
+		if (need < minNeed) {
+			minNeed=need;
+			minBack=back;
+			path=tmp;
+		} else if (need == minNeed && back < minBack) {
+			minBack=back;
+			path=tmp;
+		}
+		tmp.pop_back();
+		return;
+	}
+	for (int i = 0; i < pre[v].size(); i++)
+		dfs(pre[v][i]);
+	tmp.pop_back();
+}
+
+int main(void) {
+	fill(dis, dis + maxn, inf);
+	fill(e[0], e[0] + maxn * maxn, inf);
+	scanf("%d %d %d %d", &cmax, &n, &sp, &m);
+	for (int i = 1; i <= n; i++) {
+		scanf("%d", &weight[i]);
+		weight[i] = weight[i] - cmax / 2;
+	}
+	for (int i = 0; i < m; i++) {
+		int a, b;
+		scanf("%d %d", &a, &b);
+		scanf("%d", &e[a][b]);
+		e[b][a] = e[a][b];
+	}
+	Dijkstra(0);
+	dfs(sp);
+    printf("%d 0", minNeed);
+    for(int i = path.size() - 2; i >= 0; i--)
+        printf("->%d", path[i]);
+    printf(" %d", minBack);
+    return 0;
+
+}
