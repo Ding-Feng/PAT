@@ -1,0 +1,77 @@
+//creat a BST 
+//use level traversal to get depth
+//奶一口明天的pat··
+
+#include<cstdio>
+#include<stdlib.h>
+#include<queue>
+using namespace std;
+
+struct node {
+	int val;
+	int depth;
+	node* left;
+	node* right;
+};
+int maxd = 0, count1 = 0, count2 = 0;
+node* insert(node* p, int val) {
+	if (p == NULL) {
+		p = (node*) malloc(sizeof(struct node));
+		p->val = val;
+		p->depth = 0;
+		p->left = NULL;
+		p->right = NULL;
+	} else {
+		if (val <= p->val) {
+			p->left = insert(p->left, val);
+		} else if (val > p->val) {
+			p->right = insert(p->right, val);
+		}
+	}
+	return p;
+}
+void level(node* root) {
+	queue<node*> q;
+	root->depth = 1;
+	q.push(root);
+	while (!q.empty()) {
+		node* now = q.front();
+//		printf("%d %d\n",now->val,now->depth);
+		if (now->depth > maxd)
+			maxd = now->depth;
+		q.pop();
+		//printf("%d", now->val);
+		if (now->left) {
+			now->left->depth = now->depth + 1;
+			q.push(now->left);
+		}
+		if (now->right) {
+			now->right->depth = now->depth + 1;
+			q.push(now->right);
+		}
+	}
+}
+void pre(node* root) {
+	if (root != NULL) {
+		if (root->depth == maxd)
+			count1++;
+		if (root->depth == maxd - 1)
+			count2++;
+		pre(root->left);
+		pre(root->right);
+	}
+}
+int main(void) {
+	node* root = NULL;
+	int n;
+	int a[1010];
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &a[i]);
+		root = insert(root, a[i]);
+	}
+	level(root);
+	pre(root);
+	printf("%d + %d = %d\n",count1,count2,count1+count2);
+	return 0;
+}
