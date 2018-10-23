@@ -1,0 +1,56 @@
+暴力hash+分块思想 O(N$\sqrt{N}$)
+
+#include <cstdio>
+#include <algorithm>
+#include <stack>
+#include <string>
+using namespace std;
+const int sqrN=316;
+int Hash[100010] = { 0 };
+int Block[316] = { 0 };
+int FindMid(int size) {
+	int sum = 0;
+	int i=0;
+	size = (size + 1) / 2;
+	while(sum+Block[i]<size){
+		sum+=Block[i++];
+	}
+	int num=sqrN*i;
+	while(sum+Hash[num]<size){
+		sum+=Hash[num++];
+	}
+	return num;
+}
+int main(void) {
+	char cmd[10];
+	int n, tmp;
+	stack<int> s;
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++) {
+		scanf("%s", cmd);
+		if (cmd[1] == 'o') { //pop
+			if (s.empty()) {
+				printf("Invalid\n");
+			} else {
+				printf("%d\n", s.top());
+				Hash[s.top()]--;
+				Block[s.top() / sqrN]--;
+				s.pop();
+			}
+		} else if (cmd[1] == 'u') { //push
+			scanf("%d", &tmp);
+			s.push(tmp);
+			Hash[tmp]++;
+			Block[tmp / sqrN]++;
+		} else if (cmd[1] == 'e') {
+			if (s.empty()) {
+				printf("Invalid\n");
+			} else {
+				int ans = FindMid(s.size());
+				printf("%d\n", ans);
+			}
+		}
+	}
+
+	return 0;
+}
