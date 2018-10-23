@@ -1,4 +1,4 @@
-暴力hash+分块思想 O(N$\sqrt{N}$)
+暴力hash+分块思想
 
 #include <cstdio>
 #include <algorithm>
