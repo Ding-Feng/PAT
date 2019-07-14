@@ -3,8 +3,7 @@
 using namespace std;
 
 int main(void) {
-    auto it = 0;
-    freopen("in.txt", "r", stdin);
+    //    freopen("in.txt", "r", stdin);
     int n, count = 0;
     cin >> n;
     while (n != 1) {
