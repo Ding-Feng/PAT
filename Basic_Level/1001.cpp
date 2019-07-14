@@ -1,9 +1,8 @@
-#include <iostream>
 #include <stdio.h>
+#include <iostream>
 using namespace std;
 
-int main(void)
-{
+int main(void) {
     auto it = 0;
     freopen("in.txt", "r", stdin);
     int n, count = 0;
