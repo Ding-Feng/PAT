@@ -3,9 +3,10 @@
 using namespace std;
 
 int main(void) {
-    //    freopen("in.txt", "r", stdin);
+    freopen("in.txt", "r", stdin);
+        
     int n, count = 0;
-    cin >> n;
+    cin>> n;
     while (n != 1) {
         if (n % 2 == 0) {
             n = n / 2;
